@@ -5,8 +5,8 @@ import App from "./App";
 import { SizesStore } from "./types/utils";
 
 export default class Camera {
-  instance!: THREE.PerspectiveCamera;
-  controls!: OrbitControls;
+  instance: THREE.PerspectiveCamera;
+  controls: OrbitControls;
   app: App;
   sizes: SizesStore;
   constructor() {

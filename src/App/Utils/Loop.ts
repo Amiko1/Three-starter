@@ -2,7 +2,15 @@ import * as THREE from "three";
 import App from "../App.js";
 
 export default class Loop {
-  constructor() {}
+  app: App;
+  constructor() {
+    this.app = new App();
+    this.loop();
+  }
 
-  loop() {}
+  loop() {
+    this.app.camera.loop();
+    this.app.renderer.loop();
+    window.requestAnimationFrame(() => this.loop());
+  }
 }

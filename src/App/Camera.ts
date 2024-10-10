@@ -1,11 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
+import App from "./App";
 
 export default class Camera {
   instance!: THREE.PerspectiveCamera;
   controls!: OrbitControls;
+  app: App;
 
   constructor() {
+    this.app = new App();
     this.setInstance();
     this.setControls();
   }
@@ -21,11 +24,15 @@ export default class Camera {
   }
 
   setControls() {
-    this.controls = new OrbitControls(this.instance, this.canvas);
+    console.log(this.app, "app");
+    this.controls = new OrbitControls(this.instance, this.app.canvas);
     this.controls.enableDamping = true;
   }
 
   setResizeLister() {}
 
-  loop() {}
+  loop() {
+    this.controls.update();
+    console.log("CAMERA LOOP");
+  }
 }

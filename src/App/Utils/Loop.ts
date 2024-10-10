@@ -11,6 +11,7 @@ export default class Loop {
   loop() {
     this.app.camera.loop();
     this.app.renderer.loop();
+    this.app.world.loop();
     window.requestAnimationFrame(() => this.loop());
   }
 }

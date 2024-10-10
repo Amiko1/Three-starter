@@ -2,6 +2,7 @@ import { Scene } from "three";
 import Camera from "./Camera";
 import Renderer from "./Renderer";
 import Loop from "./Utils/Loop";
+import World from "./World/World";
 
 let instance: App | null = null;
 
@@ -11,6 +12,7 @@ export default class App {
   scene: Scene;
   renderer: Renderer;
   loop: Loop;
+  world: World;
 
   constructor() {
     if (instance) return instance;
@@ -20,6 +22,7 @@ export default class App {
     this.scene = new Scene();
     this.camera = new Camera();
     this.renderer = new Renderer();
+    this.world = new World();
     this.loop = new Loop();
   }
 }

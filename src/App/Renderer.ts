@@ -1,13 +1,17 @@
 import { WebGLRenderer } from "three";
-import { WebGL } from "three/examples/jsm/Addons.js";
+import { SizesStore } from "./types/utils";
 import App from "./App";
+import { sizesStore } from "./Utils/Store";
 
 export default class Renderer {
   instance: WebGLRenderer;
   app: App;
+  sizes: SizesStore;
   constructor() {
     this.app = new App();
+    this.sizes = sizesStore.getState();
     this.setInstance();
+    this.setResizeLister();
   }
 
   setInstance() {
@@ -16,11 +20,16 @@ export default class Renderer {
       antialias: true,
     });
 
-    this.instance.setSize(window.innerWidth, window.innerHeight);
-    this.instance.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.instance.setSize(this.sizes.width, this.sizes.height);
+    this.instance.setPixelRatio(Math.min(this.sizes.pixelRatio, 2));
   }
 
-  setResizeLister() {}
+  setResizeLister() {
+    sizesStore.subscribe((sizes) => {
+      this.instance.setSize(sizes.width, sizes.height);
+      this.instance.setPixelRatio(sizes.pixelRatio);
+    });
+  }
 
   loop() {
     this.instance.render(this.app.scene, this.app.camera.instance);

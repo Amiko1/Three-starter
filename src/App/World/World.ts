@@ -19,6 +19,6 @@ export default class World {
   }
 
   loop() {
-    this.cubeMesh.rotation.y += 0.1;
+    this.cubeMesh.rotation.y += 0.01;
   }
 }

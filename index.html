@@ -4,9 +4,21 @@
     <meta charset="utf-8" />
     <title>Threejs Starter</title>
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="./src/loader.css" />
   </head>
   <body>
     <canvas id="threejs"></canvas>
+    <div class="loader-overlay">
+      <div class="loader">
+        <button class="box start-button" disabled>0%</button>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+      </div>
+    </div>
+
     <script type="module" src="./src/main.ts"></script>
   </body>
 </html>

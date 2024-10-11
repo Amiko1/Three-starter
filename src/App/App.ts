@@ -5,6 +5,7 @@ import Loop from "./Utils/Loop";
 import World from "./World/World";
 import Resize from "./Utils/Resize";
 import AssetLoader from "./Utils/AssetLoader";
+import Preloader from "./ui/Preloader";
 
 let instance: App | null = null;
 
@@ -17,6 +18,7 @@ export default class App {
   world: World;
   resize: Resize;
   assetLoader: AssetLoader;
+  preloader: Preloader;
   constructor() {
     if (instance) return instance;
     instance = this;
@@ -24,6 +26,7 @@ export default class App {
     this.canvas = document.querySelector("#threejs") as HTMLCanvasElement;
     this.scene = new Scene();
     this.assetLoader = new AssetLoader();
+    this.preloader = new Preloader();
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.world = new World();

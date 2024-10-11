@@ -29,7 +29,6 @@ const assetStore = createStore<AssetStore>((set) => ({
   loadedAssets: {},
   addLoadedAsset: (asset, id) =>
     set((state) => {
-      console.log(state);
       return {
         loadedAssets: {
           ...state.loadedAssets,

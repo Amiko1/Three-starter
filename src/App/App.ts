@@ -6,6 +6,7 @@ import World from "./World/World";
 import Resize from "./Utils/Resize";
 import AssetLoader from "./Utils/AssetLoader";
 import Preloader from "./ui/Preloader";
+import musicToggler from "./ui/MusicTogller";
 
 let instance: App | null = null;
 
@@ -19,6 +20,7 @@ export default class App {
   resize: Resize;
   assetLoader: AssetLoader;
   preloader: Preloader;
+  musicToggler: musicToggler;
   constructor() {
     if (instance) return instance;
     instance = this;
@@ -32,5 +34,6 @@ export default class App {
     this.world = new World();
     this.resize = new Resize();
     this.loop = new Loop();
+    this.musicToggler = new musicToggler();
   }
 }

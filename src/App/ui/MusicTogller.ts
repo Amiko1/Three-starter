@@ -1,6 +1,6 @@
 export default class MusicToggler {
   musicToggler: HTMLButtonElement | null;
-  isMusicOn = true;
+  isMusicOn = false;
   audio: HTMLAudioElement;
 
   constructor() {
@@ -26,7 +26,7 @@ export default class MusicToggler {
       });
     }
 
-    this.audio.pause();
+    this.isMusicOn && this.audio.pause();
   }
 
   turnOnMusic() {
@@ -40,8 +40,9 @@ export default class MusicToggler {
       });
     }
 
-    this.audio.play().catch((error) => {
-      console.error("Audio playback failed:", error);
-    });
+    !this.isMusicOn &&
+      this.audio.play().catch((error) => {
+        console.error("Audio playback failed:", error);
+      });
   }
 }

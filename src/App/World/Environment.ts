@@ -21,14 +21,13 @@ export default class Environment {
     this.physics = this.app.world.physics;
     console.log(this.physics.add);
     this.loadEnvironment();
-    this.addMeshed();
+    this.addMeshes();
   }
 
-  addMeshed() {
-    const geometry = new BoxGeometry(1, 1, 1);
+  addMeshes() {
+    const geometry = new BoxGeometry(4, 4, 4);
     const material = new MeshStandardMaterial({ color: "blue" });
     this.cubemesh = new Mesh(geometry, material);
-    ``;
     this.cubemesh.position.y = 10;
     this.cubemesh.position.x = 0.5;
     this.cubemesh.position.z = 0.5;

@@ -5,7 +5,7 @@ import {
   World,
 } from "@dimforge/rapier3d";
 import App from "../App.js";
-import { BoxGeometry, Mesh, MeshStandardMaterial, Scene } from "three";
+import { BoxGeometry, Mesh, MeshStandardMaterial, Scene, Vector3 } from "three";
 import { appStateSTore } from "../Utils/Store.js";
 
 export default class Physics {
@@ -43,7 +43,17 @@ export default class Physics {
     rigidBody.setTranslation(mesh.position, true);
     rigidBody.setRotation(mesh.quaternion, true);
 
-    const colliderType = ColliderDesc.cuboid(0.5, 0.5, 0.5);
+    mesh.geometry.computeBoundingBox();
+    const size =
+      mesh.geometry.boundingBox?.getSize(new Vector3()) || new Vector3(0, 0, 0);
+    const worldScale = mesh.getWorldScale(new Vector3());
+    size.multiply(worldScale);
+    const colliderType = ColliderDesc.cuboid(
+      size.x / 2,
+      size.y / 2,
+      size.z / 2
+    );
+
     this.world.createCollider(colliderType, rigidBody);
     this.meshMap.set(mesh, rigidBody);
   }

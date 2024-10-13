@@ -1,11 +1,19 @@
-import { World } from "@dimforge/rapier3d";
+import {
+  ColliderDesc,
+  RigidBody,
+  RigidBodyDesc,
+  World,
+} from "@dimforge/rapier3d";
 import App from "../App.js";
-import { Scene } from "three";
+import { BoxGeometry, Mesh, MeshStandardMaterial, Scene } from "three";
+import { appStateSTore } from "../Utils/Store.js";
 
 export default class Physics {
   app: App;
   scene: Scene;
   world: World;
+  isRapierLoaded = false;
+  meshMap: Map<Mesh, RigidBody> = new Map();
   constructor() {
     this.app = new App();
     this.scene = this.app.scene;
@@ -13,9 +21,44 @@ export default class Physics {
     import("@dimforge/rapier3d").then((RAPIER) => {
       const gravity = { x: 0, y: -9.85, z: 0 };
       this.world = new RAPIER.World(gravity);
-      console.log(this.world);
+
+      const groundGeometry = new BoxGeometry(10, 1, 10);
+      const groundMaterial = new MeshStandardMaterial({ color: "yellow" });
+      const groundMesh = new Mesh(groundGeometry, groundMaterial);
+
+      const groundRigidBodyType = RigidBodyDesc.fixed();
+      const groundRigidBody = this.world.createRigidBody(groundRigidBodyType);
+      const groundColliderType = ColliderDesc.cuboid(5, 0.5, 5);
+      this.world.createCollider(groundColliderType, groundRigidBody);
+
+      this.scene.add(groundMesh);
+      this.isRapierLoaded = true;
+      appStateSTore.setState({ isPhysicisReady: true });
     });
   }
 
-  loop() {}
+  add(mesh: Mesh) {
+    const rigidBodyType = RigidBodyDesc.dynamic();
+    const rigidBody = this.world.createRigidBody(rigidBodyType);
+    rigidBody.setTranslation(mesh.position, true);
+    rigidBody.setRotation(mesh.quaternion, true);
+
+    const colliderType = ColliderDesc.cuboid(0.5, 0.5, 0.5);
+    this.world.createCollider(colliderType, rigidBody);
+    this.meshMap.set(mesh, rigidBody);
+  }
+
+  loop() {
+    if (!this.isRapierLoaded) return;
+
+    this.world.step();
+    console.log(this.meshMap);
+    this.meshMap.forEach((rigidBody, mesh) => {
+      const position = rigidBody.translation();
+      const rotation = rigidBody.rotation();
+
+      mesh.position.copy(position);
+      mesh.quaternion.copy(rotation);
+    });
+  }
 }

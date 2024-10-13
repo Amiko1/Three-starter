@@ -15,3 +15,7 @@ export type AssetStore = {
   loadedAssets: { [key: string]: AssetToLoad };
   addLoadedAsset: (asset: AssetToLoad, id: string) => void;
 };
+
+export type AppStateSTore = {
+  isPhysicisReady: boolean;
+};

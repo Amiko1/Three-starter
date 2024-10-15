@@ -5,7 +5,15 @@ import {
   World,
 } from "@dimforge/rapier3d";
 import App from "../App.js";
-import { BoxGeometry, Mesh, MeshStandardMaterial, Scene, Vector3 } from "three";
+import {
+  BoxGeometry,
+  Matrix4,
+  Mesh,
+  MeshStandardMaterial,
+  Quaternion,
+  Scene,
+  Vector3,
+} from "three";
 import { appStateSTore } from "../Utils/Store.js";
 
 export default class Physics {
@@ -40,8 +48,10 @@ export default class Physics {
   add(mesh: Mesh) {
     const rigidBodyType = RigidBodyDesc.dynamic();
     const rigidBody = this.world.createRigidBody(rigidBodyType);
-    rigidBody.setTranslation(mesh.position, true);
-    rigidBody.setRotation(mesh.quaternion, true);
+    const worldPosition = mesh.getWorldPosition(new Vector3());
+    const worldRotoation = mesh.getWorldQuaternion(new Quaternion());
+    rigidBody.setTranslation(worldPosition, true);
+    rigidBody.setRotation(worldRotoation, true);
 
     mesh.geometry.computeBoundingBox();
     const size =
@@ -62,10 +72,21 @@ export default class Physics {
     if (!this.isRapierLoaded) return;
 
     this.world.step();
-    console.log(this.meshMap);
     this.meshMap.forEach((rigidBody, mesh) => {
-      const position = rigidBody.translation();
-      const rotation = rigidBody.rotation();
+      const position = new Vector3().copy(rigidBody.translation());
+      const rotation = new Quaternion().copy(rigidBody.rotation());
+
+      position.applyMatrix4(
+        new Matrix4().copy(mesh.parent?.matrixWorld || new Matrix4()).invert()
+      );
+
+      const inverseParentMatrix = new Matrix4()
+        .extractRotation(mesh.parent?.matrixWorld || new Matrix4())
+        .invert();
+      const inverseParentRotation = new Quaternion().setFromRotationMatrix(
+        inverseParentMatrix
+      );
+      rotation.premultiply(inverseParentRotation);
 
       mesh.position.copy(position);
       mesh.quaternion.copy(rotation);

@@ -32,8 +32,14 @@ export default class Environment {
     this.cubemesh.position.x = 0.5;
     this.cubemesh.position.z = 0.5;
 
+    const groundGeometry = new BoxGeometry(10, 1, 10);
+    const groundMaterial = new MeshStandardMaterial({ color: "yellow" });
+    const groundMesh = new Mesh(groundGeometry, groundMaterial);
+
+    this.scene.add(groundMesh);
     this.scene.add(this.cubemesh);
-    this.physics.add(this.cubemesh);
+    this.physics.add(this.cubemesh, "dynamic");
+    this.physics.add(groundMesh, "fixed");
   }
 
   loadEnvironment() {

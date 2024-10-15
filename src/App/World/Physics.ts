@@ -30,23 +30,20 @@ export default class Physics {
       const gravity = { x: 0, y: -9.85, z: 0 };
       this.world = new RAPIER.World(gravity);
 
-      const groundGeometry = new BoxGeometry(10, 1, 10);
-      const groundMaterial = new MeshStandardMaterial({ color: "yellow" });
-      const groundMesh = new Mesh(groundGeometry, groundMaterial);
-
-      const groundRigidBodyType = RigidBodyDesc.fixed();
-      const groundRigidBody = this.world.createRigidBody(groundRigidBodyType);
-      const groundColliderType = ColliderDesc.cuboid(5, 0.5, 5);
-      this.world.createCollider(groundColliderType, groundRigidBody);
-
-      this.scene.add(groundMesh);
       this.isRapierLoaded = true;
       appStateSTore.setState({ isPhysicisReady: true });
     });
   }
 
-  add(mesh: Mesh) {
-    const rigidBodyType = RigidBodyDesc.dynamic();
+  add(mesh: Mesh, type: "fixed" | "dynamic") {
+    let rigidBodyType: RigidBodyDesc;
+
+    if (type === "dynamic") {
+      rigidBodyType = RigidBodyDesc.dynamic();
+    } else {
+      rigidBodyType = RigidBodyDesc.fixed();
+    }
+
     const rigidBody = this.world.createRigidBody(rigidBodyType);
     const worldPosition = mesh.getWorldPosition(new Vector3());
     const worldRotoation = mesh.getWorldQuaternion(new Quaternion());

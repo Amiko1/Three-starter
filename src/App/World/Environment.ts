@@ -38,8 +38,8 @@ export default class Environment {
 
     this.scene.add(groundMesh);
     this.scene.add(this.cubemesh);
-    this.physics.add(this.cubemesh, "dynamic");
-    this.physics.add(groundMesh, "fixed");
+    this.physics.add(this.cubemesh, "dynamic", "cuboid");
+    this.physics.add(groundMesh, "fixed", "trimesh");
   }
 
   loadEnvironment() {
